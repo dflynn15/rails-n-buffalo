@@ -1,7 +1,7 @@
 development:
   dialect: postgres
   database: flags_development
-  user: postgres
+  user: buffalo_flags 
   password: postgres
   host: 127.0.0.1
   pool: 5

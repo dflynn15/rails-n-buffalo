@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/dflynn15/rails-n-buffalo/flags/actions"
+	"github.com/dflynn15/rails-n-buffalo/buffalo/flags/actions"
 )
 
 // main is the starting point for your Buffalo application.

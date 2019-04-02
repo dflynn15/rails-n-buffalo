@@ -1,7 +1,7 @@
 package grifts
 
 import (
-	"github.com/dflynn15/rails-n-buffalo/flags/actions"
+	"github.com/dflynn15/rails-n-buffalo/buffalo/flags/actions"
 	"github.com/gobuffalo/buffalo"
 )
 
