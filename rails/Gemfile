@@ -66,3 +66,6 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # Linter
 gem 'rubocop-performance', require: false
 gem 'rubocop-rspec', require: false
+
+# Rspec for dev and test
+gem 'rspec-rails', group: %i[development test]
