@@ -1,4 +1,4 @@
-<%= form_with(model: flag, local: true, url: {:action => "create"}) do |form| %>
+<%= form_with(model: flag, local: true, url: {:action => action}) do |form| %>
   <% if flag.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(flag.errors.count, "error") %> prohibited this flag from being saved:</h2>

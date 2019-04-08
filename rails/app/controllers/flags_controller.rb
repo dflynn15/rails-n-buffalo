@@ -10,16 +10,18 @@ class FlagsController < ApplicationController
   # GET /flags/1
   # GET /flags/1.json
   def show
+    set_flag_with_project_id
   end
 
   # GET /flags/new
   def new
+    set_project_id
     @flag = Flag.new
-    @project_id = params[:project_id]
   end
 
   # GET /flags/1/edit
   def edit
+    set_flag_with_project_id
   end
 
   # POST /flags
@@ -42,10 +44,10 @@ class FlagsController < ApplicationController
   # PATCH/PUT /flags/1
   # PATCH/PUT /flags/1.json
   def update
-    set_flag
+    set_flag_with_project_id
     respond_to do |format|
       if @flag.update(flag_params)
-        format.html { redirect_to @flag, notice: "Flag was successfully updated." }
+        format.html { redirect_to project_url(@project_id), notice: "Flag was successfully updated." }
         format.json { render :show, status: :ok, location: @flag }
       else
         format.html { render :edit }

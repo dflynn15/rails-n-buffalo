@@ -6,11 +6,12 @@
   <% if @project.flags.length > 0 %>
     <ul>
       <% @project.flags.each do |flag| %>
-      <li>
-        <%= link_to flag.name, controller: "flags", action: "show", id: flag.id, project_id: @project.id%>
-        Enabled: <%= flag.enabled %>
-        <%= button_to 'Delete', {controller: "flags", action: "destroy", id: flag.id,
-            project_id: @project.id}, :method => :delete, data: {confirm: 'Are you sure?'}%>
+      <li class="enabled--<%=flag.enabled %>">
+        <%= flag.name %>
+        <%= link_to 'Show', controller: "flags", action: "show", id: flag.id, project_id: @project.id%>
+        <%= link_to 'Edit', controller: "flags", action: "edit", id: flag.id, project_id: @project.id %>
+        <%= link_to 'Destroy', {controller: "flags", action: "destroy", id: flag.id,
+            project_id: @project.id}, method: :delete, data: {confirm: 'Are you sure?'}%>
       </li>
       <% end %>
     </ul>
