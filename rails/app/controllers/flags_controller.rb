@@ -1,6 +1,6 @@
-class FlagsController < ApplicationController
-  before_action :set_flag, only: [:show, :edit, :update, :destroy]
+# frozen_string_literal: true
 
+class FlagsController < ApplicationController
   # GET /flags
   # GET /flags.json
   def index
@@ -15,6 +15,7 @@ class FlagsController < ApplicationController
   # GET /flags/new
   def new
     @flag = Flag.new
+    @project_id = params[:project_id]
   end
 
   # GET /flags/1/edit
@@ -24,11 +25,12 @@ class FlagsController < ApplicationController
   # POST /flags
   # POST /flags.json
   def create
+    set_project_id
     @flag = Flag.new(flag_params)
 
     respond_to do |format|
       if @flag.save
-        format.html { redirect_to @flag, notice: 'Flag was successfully created.' }
+        format.html { redirect_to project_url(@project_id), notice: "Flag was successfully created." }
         format.json { render :show, status: :created, location: @flag }
       else
         format.html { render :new }
@@ -40,9 +42,10 @@ class FlagsController < ApplicationController
   # PATCH/PUT /flags/1
   # PATCH/PUT /flags/1.json
   def update
+    set_flag
     respond_to do |format|
       if @flag.update(flag_params)
-        format.html { redirect_to @flag, notice: 'Flag was successfully updated.' }
+        format.html { redirect_to @flag, notice: "Flag was successfully updated." }
         format.json { render :show, status: :ok, location: @flag }
       else
         format.html { render :edit }
@@ -54,9 +57,10 @@ class FlagsController < ApplicationController
   # DELETE /flags/1
   # DELETE /flags/1.json
   def destroy
+    set_flag_with_project_id
     @flag.destroy
     respond_to do |format|
-      format.html { redirect_to flags_url, notice: 'Flag was successfully destroyed.' }
+      format.html { redirect_to project_url(@project_id), notice: "Flag was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -67,8 +71,17 @@ class FlagsController < ApplicationController
       @flag = Flag.find(params[:id])
     end
 
+    def set_project_id
+      @project_id = params[:project_id]
+    end
+
+    def set_flag_with_project_id
+      set_flag
+      set_project_id
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def flag_params
-      params.require(:flag).permit(:name, :enabled)
+      params.require(:flag).permit(:name, :enabled, :project_id)
     end
 end
