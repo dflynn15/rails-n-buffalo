@@ -71,3 +71,7 @@ gem "rubocop-rspec", require: false
 
 # Rspec for dev and test
 gem "rspec-rails", group: %i[development test]
+
+gem "bootstrap", "~> 4.3"
+
+gem "jquery-rails", "~> 4.3"
