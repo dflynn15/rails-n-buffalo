@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class FlagsController < ApplicationController
+  before_action :authenticate_user!
+
   # GET /flags
   # GET /flags.json
   def index
