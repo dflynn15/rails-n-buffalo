@@ -1,0 +1,6 @@
+- id: "flag.created.success"
+  translation: "Flag was successfully created."
+- id: "flag.updated.success"
+  translation: "Flag was successfully updated."
+- id: "flag.destroyed.success"
+  translation: "Flag was successfully destroyed."
