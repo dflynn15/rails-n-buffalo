@@ -12,10 +12,17 @@
   </head>
   <body class="d-flex flex-column h-100">
     <%= partial("navigation.html") %>
-    <div class="container">
-      <%= partial("flash.html") %>
-      <%= yield %>
-    </div>
+    <main role="main" class="flex-shrink-0">
+      <div class="container">
+        <%= partial("flash.html") %>
+        <%= yield %>
+      </div>
+    </main>
+    <footer class="footer mt-auto py-3">
+      <div class="container">
+        <span class="text-muted">Created by Daniel Flynn</span>
+      </div>
+    </footer>
 
     <%= javascriptTag("application.js") %>
   </body>

@@ -5,14 +5,13 @@
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="<%= rootPath() %>">Home <span class="sr-only">(current)</span></a>
       </li>
-      <% if (current_user) { %>
-        <li class="nav-item">My Profile</li>
-        <li class="nav-item">My Projects</li>
-        <li class="nav-item"><a href="/logout" data-method="DELETE">Signout</a></li>
+      <%= if (current_user) { %>
+        <li class="nav-iem"><a href="<%= projectsPath() %>" class="nav-link">My Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout" data-method="DELETE">Signout</a></li>
       <% } else { %>
-        <li class="nav-item"><a href="/auth/github">Github</a></li>
+        <li class="nav-item"><a class="nav-link" href="<%= authPath({provider: "github"}) %>">Github</a></li>
       <% } %>
     </ul>
   </div>
