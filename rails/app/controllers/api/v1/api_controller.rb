@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
 module Api::V1
-  class FlagsController < ApiController
+  class ApiController < ::ApplicationController
   end
 end
