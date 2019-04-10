@@ -135,6 +135,8 @@ func (v FlagsResource) Edit(c buffalo.Context) error {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
+	setProjectIDToCOntext(c)
+
 	// Allocate an empty Flag
 	flag := &models.Flag{}
 
