@@ -67,30 +67,42 @@ func (v FlagsResource) Show(c buffalo.Context) error {
 		return c.Error(404, err)
 	}
 
+	setProjectIDToCOntext(c)
+
 	return c.Render(200, r.Auto(c, flag))
 }
 
 // New renders the form for creating a new Flag.
 // This function is mapped to the path GET /flags/new
 func (v FlagsResource) New(c buffalo.Context) error {
+	setProjectIDToCOntext(c)
 	return c.Render(200, r.Auto(c, &models.Flag{}))
 }
 
 // Create adds a Flag to the DB. This function is mapped to the
 // path POST /flags
 func (v FlagsResource) Create(c buffalo.Context) error {
-	// Allocate an empty Flag
-	flag := &models.Flag{}
-
-	// Bind flag to the html form elements
-	if err := c.Bind(flag); err != nil {
-		return errors.WithStack(err)
-	}
-
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
+	}
+
+	project := &models.Project{}
+
+	// To find the Project the parameter project_id is used.
+	if err := tx.Find(project, c.Param("project_id")); err != nil {
+		return c.Error(404, err)
+	}
+
+	// Allocate an empty Flag
+	flag := &models.Flag{}
+
+	flag.ProjectID = project.ID
+
+	// Bind flag to the html form elements
+	if err := c.Bind(flag); err != nil {
+		return errors.WithStack(err)
 	}
 
 	// Validate the data from the html form
@@ -170,6 +182,7 @@ func (v FlagsResource) Update(c buffalo.Context) error {
 
 	// If there are no errors set a success message
 	c.Flash().Add("success", T.Translate(c, "flag.updated.success"))
+
 	// and redirect to the flags index page
 	return c.Render(200, r.Auto(c, flag))
 }
@@ -181,6 +194,15 @@ func (v FlagsResource) Destroy(c buffalo.Context) error {
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
+	}
+
+	// Allocate an empty Project
+	project := &models.Project{}
+
+	// To find the Project the parameter project_id is used.
+	if err := tx.Eager().Find(project, c.Param("project_id")); err != nil {
+		
+		return c.Error(404, err)
 	}
 
 	// Allocate an empty Flag
@@ -197,6 +219,12 @@ func (v FlagsResource) Destroy(c buffalo.Context) error {
 
 	// If there are no errors set a flash message
 	c.Flash().Add("success", T.Translate(c, "flag.destroyed.success"))
+
 	// Redirect to the flags index page
-	return c.Render(200, r.Auto(c, flag))
+	return c.Render(200, r.Auto(c, project))
+}
+
+func setProjectIDToCOntext(c buffalo.Context) error {
+	c.Set("projectID", c.Param("project_id"))
+	return nil
 }

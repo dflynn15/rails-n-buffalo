@@ -15,5 +15,15 @@
   <strong>Name</strong>: <%= project.Name %>
 </p>
 <p>
-  <strong>Flags</strong>: <%= project.Flags %>
+  <strong>Flags</strong>:
+  <ul>
+    <%= for (flag) in project.Flags {%>
+      <li class="enabled--<%= flag.Enabled %>">
+        <a href="<%= projectFlagPath({ project_id: project.ID, flag_id: flag.ID} )%>"><%= flag.Name %></a>
+      </li>
+    <% } %>
+  </ul>
+</p>
+<p>
+ <a href="<%= newProjectFlagsPath({ project_id: project.ID })%>" class="btn btn-success">Create Flag</a>
 </p>

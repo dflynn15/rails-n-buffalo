@@ -33,6 +33,7 @@ func (v ProjectsResource) List(c buffalo.Context) error {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
+	user := c.Value("current_user").(*models.User)
 	projects := &models.Projects{}
 
 	// Paginate results. Params "page" and "per_page" control pagination.
@@ -40,7 +41,7 @@ func (v ProjectsResource) List(c buffalo.Context) error {
 	q := tx.PaginateFromParams(c.Params())
 
 	// Retrieve all Projects from the DB
-	if err := q.All(projects); err != nil {
+	if err := q.Where("user_id = ?", user.ID).All(projects); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -63,7 +64,7 @@ func (v ProjectsResource) Show(c buffalo.Context) error {
 	project := &models.Project{}
 
 	// To find the Project the parameter project_id is used.
-	if err := tx.Find(project, c.Param("project_id")); err != nil {
+	if err := tx.Eager().Find(project, c.Param("project_id")); err != nil {
 		return c.Error(404, err)
 	}
 
@@ -79,6 +80,14 @@ func (v ProjectsResource) New(c buffalo.Context) error {
 // Create adds a Project to the DB. This function is mapped to the
 // path POST /projects
 func (v ProjectsResource) Create(c buffalo.Context) error {
+	// Get the DB connection from the context
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
+
+	user := c.Value("current_user").(*models.User)
+
 	// Allocate an empty Project
 	project := &models.Project{}
 
@@ -87,11 +96,7 @@ func (v ProjectsResource) Create(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
+	project.UserID = user.ID
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(project)
@@ -187,8 +192,13 @@ func (v ProjectsResource) Destroy(c buffalo.Context) error {
 	project := &models.Project{}
 
 	// To find the Project the parameter project_id is used.
-	if err := tx.Find(project, c.Param("project_id")); err != nil {
+	if err := tx.Eager().Find(project, c.Param("project_id")); err != nil {
 		return c.Error(404, err)
+	}
+
+	// Destroy all of the Flags
+	if err := tx.Destroy(project.Flags); err!=nil {
+		return errors.WithStack(err)
 	}
 
 	if err := tx.Destroy(project); err != nil {
