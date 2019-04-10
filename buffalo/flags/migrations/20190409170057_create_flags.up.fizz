@@ -3,4 +3,5 @@ create_table("flags") {
 	t.Column("enabled", "bool", {})
 	t.Column("name", "string", {})
 	t.Column("project_id", "uuid", {})
+  t.ForeignKey("project_id", {"projects": ["id"]}, {})
 }

@@ -1,6 +1,6 @@
 create_table("projects") {
 	t.Column("id", "uuid", {primary: true})
-	t.Column("user_id", "uuid", {})
 	t.Column("name", "string", {})
-	t.Column("flags", "uuid", {})
+	t.Column("user_id", "uuid", {})
+  t.ForeignKey("user_id", {"users": ["id"]}, {})
 }

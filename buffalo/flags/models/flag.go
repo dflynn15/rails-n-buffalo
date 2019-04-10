@@ -15,7 +15,8 @@ type Flag struct {
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 	Enabled   bool      `json:"enabled" db:"enabled"`
 	Name      string    `json:"name" db:"name"`
-	ProjectID uuid.UUID `json:"project_id" db:"project_id"`
+	ProjectID uuid.UUID `json:"-" db:"project_id"`
+	Project   *Project  `json:"project,omitempty" belongs_to:"project"`
 }
 
 // String is not required by pop and may be deleted

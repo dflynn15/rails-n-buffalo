@@ -11,6 +11,7 @@ import (
 	"github.com/gofrs/uuid"
 )
 
+// User definition
 type User struct {
 	ID         uuid.UUID    `json:"id" db:"id"`
 	CreatedAt  time.Time    `json:"created_at" db:"created_at"`
@@ -19,6 +20,7 @@ type User struct {
 	Email      nulls.String `json:"email" db:"email"`
 	Provider   string       `json:"provider" db:"provider"`
 	ProviderID string       `json:"provider_id" db:"provider_id"`
+	Project    []Project    `json:"projects,omitempty" has_many:"projects"`
 }
 
 // String is not required by pop and may be deleted

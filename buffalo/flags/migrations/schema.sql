@@ -41,9 +41,8 @@ ALTER TABLE public.flags OWNER TO buffalo_flags;
 
 CREATE TABLE public.projects (
     id uuid NOT NULL,
-    user_id uuid NOT NULL,
     name character varying(255) NOT NULL,
-    flags uuid NOT NULL,
+    user_id uuid NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -108,6 +107,22 @@ ALTER TABLE ONLY public.users
 --
 
 CREATE UNIQUE INDEX schema_migration_version_idx ON public.schema_migration USING btree (version);
+
+
+--
+-- Name: flags flags_project_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: buffalo_flags
+--
+
+ALTER TABLE ONLY public.flags
+    ADD CONSTRAINT flags_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id);
+
+
+--
+-- Name: projects projects_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: buffalo_flags
+--
+
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT projects_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
