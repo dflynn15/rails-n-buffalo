@@ -198,15 +198,6 @@ func (v FlagsResource) Destroy(c buffalo.Context) error {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
-	// Allocate an empty Project
-	project := &models.Project{}
-
-	// To find the Project the parameter project_id is used.
-	if err := tx.Eager().Find(project, c.Param("project_id")); err != nil {
-		
-		return c.Error(404, err)
-	}
-
 	// Allocate an empty Flag
 	flag := &models.Flag{}
 
@@ -222,8 +213,11 @@ func (v FlagsResource) Destroy(c buffalo.Context) error {
 	// If there are no errors set a flash message
 	c.Flash().Add("success", T.Translate(c, "flag.destroyed.success"))
 
-	// Redirect to the flags index page
-	return c.Render(200, r.Auto(c, project))
+
+	projectPath := "/projects/" + c.Param("project_id")
+
+	// Redirect to the projects index page
+	return c.Redirect(302, projectPath)
 }
 
 func setProjectIDToCOntext(c buffalo.Context) error {
